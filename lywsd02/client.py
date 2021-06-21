@@ -3,7 +3,7 @@ import contextlib
 import logging
 import struct
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from bluepy import btle
 
@@ -197,3 +197,22 @@ class Lywsd02Client:
         max_temp /= 100
 
         self._history_data[idx] = [ts, min_temp, min_hum, max_temp, max_hum]
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    print("Local time:", datetime.now())
+    mac = 'E7:50:59:40:A4:AC'
+    client = Lywsd02Client(mac)
+    # data = client.data
+    # print(f"temp: {data.temperature}")
+    # print(f"humidity: {data.humidity}")
+    # Hack to set the clock on the MHO-C303
+    print(f"battery: {client.battery}")
+    # print(f"num_stored_entries: {client.num_stored_entries}")
+    # print(client.history_data)
+    client.tz_offset = 0
+    client.time = datetime.fromtimestamp(time.mktime(time.gmtime()) - 3600*9)
+
+    # print(client.time)
+
+# See PyCharm help at https://www.jetbrains.com/help/pycharm/
